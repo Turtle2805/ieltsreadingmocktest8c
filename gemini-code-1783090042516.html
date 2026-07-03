@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Lê Hằng English - IELTS Reading Practice Test</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #FF85A2;
+            --secondary-pink: #FFB3C6;
+            --dark-purple: #8854C0;
+            --mint-green: #00C9A7;
+            --yellow-sunny: #FDCB6E;
+            --correct-green: #00D26A;
+            --wrong-red: #FF4757;
+            --text-dark: #2D3436;
+            --bg-light: #FFF5F7;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            background-image: linear-gradient(45deg, #FFF0F5 25%, transparent 25%), 
+                              linear-gradient(-45deg, #FFF0F5 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #FFF0F5 75%), 
+                              linear-gradient(-45deg, transparent 75%, #FFF0F5 75%);
+            background-size: 40px 40px;
+            background-position: 0 0, 0 20px, 20px -20px, -20px 0;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Header Control Strip */
+        header {
+            background: linear-gradient(135deg, var(--primary-pink), var(--dark-purple));
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .header-title h1 {
+            font-size: 18px;
+            font-weight: 700;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .header-title p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #timer-display {
+            font-size: 22px;
+            font-weight: 700;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .btn-timer {
+            background: var(--yellow-sunny);
+            border: none;
+            color: var(--text-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #D6A232;
+            transition: all 0.1s;
+        }
+
+        .btn-timer:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 200px;
+            background: rgba(255, 255, 255, 0.3);
+            height: 14px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--mint-green), #55E6C1);
+            transition: width 0.3s ease;
+        }
+
+        /* Workspace Grid Split Screen Layout */
+        .workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            height: 100%;
+        }
+
+        /* Left Column Pane: Reading Sheet */
+        .panel-left {
+            border-right: 4px dashed var(--secondary-pink);
+            background-color: white;
+            padding-right: 30px;
+        }
+
+        /* Black text selection pastel pink highlights color */
+        .panel-left ::selection {
+            background-color: #FFD1DC;
+            color: #000;
+        }
+
+        .passage-title {
+            color: var(--dark-purple);
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .passage-subtitle {
+            font-size: 15px;
+            color: #7F8C8D;
+            margin-bottom: 20px;
+            border-bottom: 4px solid var(--secondary-pink);
+            padding-bottom: 12px;
+            font-style: italic;
+        }
+
+        .paragraph-block {
+            margin-bottom: 24px;
+            line-height: 1.8;
+            font-size: 16px;
+            text-align: justify;
+            position: relative;
+            padding: 12px;
+            border-radius: 12px;
+            transition: background-color 0.4s ease;
+            background-color: #FFFDFE;
+            border: 1px solid #FFF0F3;
+        }
+
+        .paragraph-block.highlighted-location {
+            background-color: #FFF2B2 !important;
+            border-left: 6px solid var(--yellow-sunny);
+            animation: pulse-highlight 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-highlight {
+            0% { background-color: #FFF2B2; }
+            100% { background-color: #FFE66D; }
+        }
+
+        .paragraph-label {
+            display: inline-block;
+            background-color: var(--dark-purple);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .btn-translate {
+            background: #F1F2F6;
+            border: 2px solid #CED6E0;
+            color: #57606F;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+        }
+
+        .btn-translate:hover {
+            background: var(--secondary-pink);
+            color: white;
+            border-color: var(--primary-pink);
+        }
+
+        .translation-content {
+            display: none;
+            background-color: #FFF0F3;
+            border-left: 4px solid var(--primary-pink);
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #4B4B4B;
+            line-height: 1.7;
+        }
+
+        /* Right Column Pane: Exercises Area */
+        .panel-right {
+            background-color: #FFF9FA;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--dark-purple), var(--primary-pink));
+            color: white;
+            padding: 10px 16px;
+            border-radius: 15px;
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        .question-card {
+            background: white;
+            border: 3px solid #FFE3E8;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 6px 0 #FFE3E8;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-text {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Form Dropdown Menus roll select style */
+        .roll-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            border: 3px solid #CED6E0;
+            border-radius: 15px;
+            padding: 6px 32px 6px 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 0 #CED6E0;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238854C0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 14px;
+            min-width: 155px;
+            margin-left: 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .roll-select:focus {
+            border-color: var(--dark-purple);
+        }
+
+        /* Multiple choice individual rows block decoration styling */
+        .mc-option {
+            background: white;
+            border: 2.5px solid #E4E7EB;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 0 #E4E7EB;
+        }
+
+        .mc-option:hover {
+            transform: scale(1.01);
+            border-color: var(--secondary-pink);
+            background-color: #FFFDFE;
+        }
+
+        .mc-option.selected-correct {
+            background-color: #E8FBEF !important;
+            border-color: var(--correct-green) !important;
+            box-shadow: 0 4px 0 var(--correct-green) !important;
+            color: #155724;
+            font-weight: 700;
+        }
+
+        .mc-option.selected-wrong {
+            background-color: #FFEAEB !important;
+            border-color: var(--wrong-red) !important;
+            box-shadow: 0 4px 0 var(--wrong-red) !important;
+            color: #721C24;
+        }
+
+        .mc-letter {
+            background-color: #F1F2F6;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: #57606F;
+            flex-shrink: 0;
+        }
+
+        .selected-correct .mc-letter {
+            background-color: var(--correct-green);
+            color: white;
+        }
+
+        .selected-wrong .mc-letter {
+            background-color: var(--wrong-red);
+            color: white;
+        }
+
+        /* Explanations container format blocks */
+        .explanation-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            background-color: #F8F9FA;
+            border: 2px dashed #DCDDE1;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .exp-segment { margin-bottom: 8px; }
+        .exp-title { font-weight: 700; color: #2F3542; }
+        .exp-correct { color: var(--correct-green); font-weight: 700; }
+        .exp-quote { font-style: italic; color: #57606F; background: #FFF; padding: 8px; border-left: 3px solid var(--yellow-sunny); margin: 6px 0; border-radius: 0 6px 6px 0; }
+
+        .btn-locate {
+            background: var(--yellow-sunny);
+            border: none;
+            padding: 4px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 700;
+            box-shadow: 0 2px 0 #D6A232;
+        }
+
+        /* Core card visual adjustments animations shake rows */
+        .card-correct {
+            border-color: var(--correct-green) !important;
+            box-shadow: 0 6px 0 var(--correct-green) !important;
+            background-color: #E8FBEF !important;
+        }
+
+        .card-wrong-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* Glossary Section formatting items */
+        .glossary-section {
+            margin-top: 40px;
+            background: white;
+            border: 3px solid var(--secondary-pink);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .glossary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .glossary-table th {
+            background-color: var(--primary-pink);
+            color: white;
+            text-align: left;
+            padding: 10px;
+            font-weight: 700;
+        }
+
+        .glossary-table td {
+            padding: 10px;
+            border-bottom: 1px solid #FFE3E8;
+        }
+
+        .glossary-table tr:nth-child(even) {
+            background-color: #FFF5F7;
+        }
+
+        /* Sticky bottom anchor submission drawer strip bar */
+        .footer-submit {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            border-top: 4px solid var(--secondary-pink);
+        }
+
+        .btn-submit-all {
+            background: linear-gradient(135deg, var(--correct-green), #2ED573);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #218C4E;
+            transition: all 0.1s;
+        }
+
+        .btn-submit-all:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+
+        /* Final Result dashboard overlay summary popups */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background: white;
+            border: 6px solid var(--primary-pink);
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popUp {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-score {
+            font-size: 60px;
+            font-weight: 700;
+            color: var(--dark-purple);
+            margin: 20px 0;
+        }
+
+        .modal-comment {
+            font-size: 16px;
+            font-weight: 700;
+            color: #57606F;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .btn-close-modal {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #D65A7F;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation Section Control Toolbar -->
+    <header>
+        <div class="header-title">
+            <p>Giáo viên tạo: Ms Lê Hằng English</p>
+            <h1>IELTS READING MOCK TEST - 200 YEARS OF AUSTRALIAN LANDSCAPES</h1>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                <span style="font-size: 11px; font-weight: 700; color: white;">TIẾN ĐỘ BÀI THI:</span>
+                <div class="progress-container">
+                    <div class="progress-bar" id="completion-progress"></div>
+                </div>
+            </div>
+
+            <div class="timer-container">
+                <span id="timer-display">25:00</span>
+                <button class="btn-timer" id="btn-timer-toggle" onclick="toggleTimer()">BẮT ĐẦU</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Frame Division Layout (Split-Screen) -->
+    <div class="workspace">
+        
+        <!-- Left Column Pane: Reading Sheet text panels -->
+        <div class="panel panel-left" id="reading-passage-panel">
+            <h2 class="passage-title">200 Years of Australian Landscapes at the Royal Academy in London</h2>
+            <div class="passage-subtitle">This exhibition promises to chart the evolution of a nation through its art, but not everyone agrees with the reasons behind the choice of artwork</div>
+            
+            <div class="paragraph-block" id="pA">
+                <span class="paragraph-label">Paragraph A</span><br>
+                For the casual viewer, the exhibition of landscapes, Australia, selected by the Royal Academy of Art will be a spectacular guide through Australian art history. Included in the exhibition are a range of artists and styles, dating from the earliest days of colonial art and progressing through expressionism and modernism to the artists of the 20th century, culminating with the current generation of Australian artists. It is hardly surprising, then, that this results in a flexible, wide-ranging notion of landscape.
+                <br><button class="btn-translate" onclick="toggleTranslation('A')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-A">
+                    Đối với người xem thông thường, triển lãm tranh phong cảnh có tên "Australia" do Học viện Nghệ thuật Hoàng gia lựa chọn sẽ là một hướng dẫn ngoạn mục xuyên suốt lịch sử nghệ thuật Úc. Triển lãm bao gồm hàng loạt nghệ sĩ và phong cách, có niên đại từ những ngày đầu của nghệ thuật thuộc địa và tiến triển qua chủ nghĩa biểu hiện cũng như chủ nghĩa hiện đại đến các nghệ sĩ của thế kỷ 20, đỉnh cao là thế hệ nghệ sĩ Úc hiện tại. Do đó, không có gì ngạc nhiên khi điều này dẫn đến một khái niệm linh hoạt, sâu rộng về phong cảnh.
+                </div>
+            </div>
+
+            <div class="paragraph-block" id="pB">
+                <span class="paragraph-label">Paragraph B</span><br>
+                But this landmark exhibition gives rise to some questions, and perhaps problems, regarding Britain’s relationship with its former colony. By choosing a style of painting at which British artists excel, the Academy could be seen as inviting criticism that hints at a telling attitude towards art by comparison. But it is the very theme of landscape painting that makes this a controversial selection. To consider if condescending is perhaps too strong, but for Joanna Mendelssohn, Australian critic and Associate Professor at the University of NSW’s College of Fine Arts (COFA), there is a suggestion that British artistic values have directed this exhibition, rather than allowing Australia the freedom to demonstrate its maturity.
+                <br><button class="btn-translate" onclick="toggleTranslation('B')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-B">
+                    Nhưng cuộc triển lãm mang tính cột mốc này làm nảy sinh một số câu hỏi, và có lẽ cả những vấn đề, liên quan đến mối quan hệ của Anh với thuộc địa cũ của mình. Bằng cách chọn một phong cách hội họa mà các nghệ sĩ Anh xuất sắc, Học viện có thể bị coi là đang tự chuốc lấy những lời chỉ trích ám chỉ một thái độ rõ ràng đối với nghệ thuật khi so sánh. Nhưng chính chủ đề hội họa phong cảnh mới là thứ khiến đây trở thành một sự lựa chọn gây tranh cãi. Để xem liệu từ "hạ mình, kẻ cả" có quá mạnh hay không, nhưng đối với Joanna Mendelssohn, nhà phê bình nghệ thuật người Úc kiêm Phó giáo sư tại Cao đẳng Mỹ thuật thuộc Đại học NSW (COFA), có một giả thuyết cho rằng các giá trị nghệ thuật của Anh đã định hướng cuộc triển lãm này, thay vì cho phép nước Úc tự do thể hiện sự trưởng thành của mình.
+                </div>
+            </div>
+
+            <div class="paragraph-block" id="pC">
+                <span class="paragraph-label">Paragraph C</span><br>
+                What Mendelssohn found surprising about the exhibition was the underlying rules for the selection of works seemed to have been so conservative. Since the landscape is a very strong British artistic theme, it appeared to her that when the British looked to the art of a former colony, there was a tendency for them to think that those colonies would continue to be like the British themselves. In reviewing Australian art, the British insisted on looking at the genre of landscape painting.
+                <br><button class="btn-translate" onclick="toggleTranslation('C')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-C">
+                    Điều Mendelssohn cảm thấy ngạc nhiên về cuộc triển lãm là các quy tắc cơ bản cho việc lựa chọn tác phẩm dường như quá bảo thủ. Vì phong cảnh là một chủ đề nghệ thuật rất mạnh của Anh, đối với bà, có vẻ như khi người Anh nhìn vào nghệ thuật của một thuộc địa cũ, họ có xu hướng nghĩ rằng các thuộc địa đó sẽ tiếp tục giống như chính người Anh vậy. Khi đánh giá nghệ thuật Úc, người Anh khăng khăng đòi nhìn vào thể loại tranh phong cảnh.
+                </div>
+            </div>
+
+            <div class="paragraph-block" id="pD">
+                <span class="paragraph-label">Paragraph D</span><br>
+                Because of colonial ties, it was inevitable during Australian art’s formative years that it would reflect Britain’s devotion to the beloved landscape before its own character and idiosyncrasies took shape. And while Mendelssohn’s concern over the exhibition’s conventional selection is valid, the Academy is nevertheless embracing the peculiarities of Australian art from the mid-19th century onward, albeit within the boundaries of landscape.
+                <br><button class="btn-translate" onclick="toggleTranslation('D')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-D">
+                    Do các mối liên hệ thuộc địa, việc nghệ thuật Úc trong những năm định hình phản ánh sự cống hiến của người Anh đối với cảnh quan yêu dấu trước khi đặc điểm và những nét lập dị đặc trưng của chính nó thành hình là điều không thể tránh khỏi. Và trong khi mối lo ngại của Mendelssohn về sự lựa chọn mang tính truyền thống của cuộc triển lãm là có cơ sở, Học viện dù sao vẫn đang đón nhận những nét độc đáo riêng biệt của nghệ thuật Úc từ giữa thế kỷ 19 trở đi, mặc dù vẫn nằm trong ranh giới của phong cảnh.
+                </div>
+            </div>
+
+            <div class="paragraph-block" id="pE">
+                <span class="paragraph-label">Paragraph E</span><br>
+                Australia is curated by Kathleen Soriano, director of exhibitions at the Royal Academy. ‘Certainly the influence of English, French or German art is much more evident in the early periods, in the early 1800s to mid-1800s,’ she says. ‘What I wanted to show was how Australian art develops a real distinctiveness, associated with the landscape and the light.’
+                <br><button class="btn-translate" onclick="toggleTranslation('E')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-E">
+                    "Australia" được giám tuyển bởi Kathleen Soriano, giám đốc triển lãm tại Học viện Hoàng gia. Bà nói: 'Chắc chắn ảnh hưởng của nghệ thuật Anh, Pháp hay Đức thể hiện rõ ràng hơn nhiều trong các thời kỳ đầu, từ đầu những năm 1800 đến giữa những năm 1800. Điều tôi muốn chỉ ra là nghệ thuật Úc phát triển một nét độc đáo thực sự như thế nào, gắn liền với phong cảnh và ánh sáng.'
+                </div>
+            </div>
+
+            <div class="paragraph-block" id="pF">
+                <span class="paragraph-label">Paragraph F</span><br>
+                The fusion of ‘tradition’ of the European kind with something more specifically Australian, and often personal, is crucial to the exhibition and extends particularly to some of the more contemporary artists involved. Sydney-born video artist Shaun Gladwell is a good example of this. Gladwell’s most famous piece, which is featured in the exhibition, is Storm Sequence (2000), a video of Gladwell skateboarding on the Bondi seafront as one of Sydney’s signature brutal storms lingers offshore. It is his acknowledgment of landscape (or seascape) tradition, coloured by Gladwell’s own individualism. ‘To exhibit my work in this show might make some sense because I was interested in Turner and the idea of atmosphere affecting vision, something I was really interested in around the time of Storm Sequence. I was thinking about this tradition of Romantic landscape, but I wanted to make it personal,’ says Gladwell. But he didn’t want to just embark on borrowing imagery from elsewhere. He wanted to bring it to his experience and his world through skateboarding and beach culture.
+                <br><button class="btn-translate" onclick="toggleTranslation('F')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-F">
+                    Sự kết hợp giữa 'truyền thống' kiểu châu Âu với một cái gì đó mang tính Úc cụ thể hơn, và thường mang tính cá nhân, là cốt lõi của cuộc triển lãm và mở rộng đặc biệt đến một số nghệ sĩ đương đại tham gia. Nghệ sĩ video sinh ra tại Sydney Shaun Gladwell là một ví dụ điển hình cho điều này. Tác phẩm nổi tiếng nhất của Gladwell, được giới thiệu trong triển lãm, là "Storm Sequence" (2000), một video quay cảnh Gladwell trượt ván trên bờ biển Bondi khi một trong những cơn bão tàn khốc đặc trưng của Sydney đang lảng vảng ngoài khơi. Đó là sự công nhận của ông về truyền thống phong cảnh (hoặc cảnh biển), được tô điểm bởi chủ nghĩa cá nhân của riêng Gladwell. Gladwell nói: 'Việc trưng bày tác phẩm của tôi trong chương trình này có thể có ý nghĩa vì tôi quan tâm đến Turner và ý tưởng về bầu không khí ảnh hưởng đến thị giác, một điều tôi thực sự quan tâm vào khoảng thời gian làm Storm Sequence. Tôi đang nghĩ về truyền thống phong cảnh Lãng mạn này, nhưng tôi muốn làm cho nó mang tính cá nhân'. Nhưng anh không muốn chỉ bắt đầu vay mượn hình ảnh từ nơi khác. Anh muốn mang nó vào trải nghiệm và thế giới của mình thông qua môn trượt ván và văn hóa bãi biển.
+                </div>
+            </div>
+
+            <div class="paragraph-block" id="pG">
+                <span class="paragraph-label">Paragraph G</span><br>
+                So while it may seem narrow for Britain to reduce Australian art to the genre of landscape, there can be little denying that British landscape painting is still relevant to a current generation of Australian practitioners, however indirectly.
+                <br><button class="btn-translate" onclick="toggleTranslation('G')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-G">
+                    Vì vậy, mặc dù việc nước Anh thu hẹp nghệ thuật Úc vào thể loại tranh phong cảnh có vẻ hạn hẹp, nhưng không thể phủ nhận rằng hội họa phong cảnh của Anh vẫn còn liên quan đến thế hệ những người hành nghề nghệ thuật Úc hiện tại, dù là một cách gián tiếp.
+                </div>
+            </div>
+
+            <div class="paragraph-block" id="pH">
+                <span class="paragraph-label">Paragraph H</span><br>
+                Visitors to the exhibition encounter Australian Aboriginal art first, the idea being that these works warrant a prominent position because they were ‘first’. Over the last couple of decades, London has hosted many successful exhibitions of Aboriginal art in smaller spaces, but for Soriano, Australia represents an opportunity to place such art within the context of new relationships to the art of the settlers and white Australia. ‘One of the reasons landscape was seen as being the right theme was because Australian art started in and on the landscape,’ she says. ‘[The exhibition] is a beautiful meshing of the two different kinds of art that allowed me to bring them together comfortably and honestly with this theme. It was important for me to present Indigenous art to audiences, and I felt it was most accurate to be seen as part of Australian art history, rather than a separate exhibition of its own.’
+                <br><button class="btn-translate" onclick="toggleTranslation('H')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-H">
+                    Khách tham quan triển lãm sẽ bắt gặp nghệ thuật của thổ dân Úc đầu tiên, ý tưởng là những tác phẩm này xứng đáng có một vị trí nổi bật vì chúng xuất hiện 'đầu tiên'. Trong vài thập kỷ qua, Luân Đôn đã tổ chức nhiều triển lãm thành công về nghệ thuật thổ dân trong không gian nhỏ hơn, nhưng đối với Soriano, "Australia" đại diện cho một cơ hội để đặt nghệ thuật đó vào bối cảnh các mối quan hệ mới với nghệ thuật của những người định cư và người Úc da trắng. Bà nói: 'Một trong những lý do khiến phong cảnh được xem là chủ đề phù hợp vì nghệ thuật Úc bắt đầu từ trong và trên chính phong cảnh'. 'Triển lãm là sự đan xen đẹp đẽ giữa hai loại hình nghệ thuật khác nhau, cho phép tôi đưa chúng lại với nhau một cách thoải mái và trung thực với chủ đề này. Điều quan trọng đối với tôi là giới thiệu nghệ thuật Bản địa cho khán giả, và tôi cảm thấy chính xác nhất khi nó được xem như một phần của lịch sử nghệ thuật Úc, thay vì là một triển lãm tách biệt của riêng nó.'
+                </div>
+            </div>
+
+            <div class="paragraph-block" id="pI">
+                <span class="paragraph-label">Paragraph I</span><br>
+                Meanwhile, Australian critic Mendelssohn also points out that London is increasingly less important to today’s generation of artists, and this somewhat weakens the ceremony surrounding the exhibition in London. ‘China is the most important art market in the world,’ she says. ‘If you’ve made it in Shanghai, you’ve made it. The world has changed. My students in Australia, who come from all over the world, really want to see Venice Biennale and Art Basel, but they’re less interested in going to London. When I was growing up, London was the destination, and then when I was at university all the smart young things wanted to go to New York,’ she added. ‘Now they want to go everywhere. There’s no such thing as the centre and the periphery like there used to be. It’s much more complicated.’
+                <br><button class="btn-translate" onclick="toggleTranslation('I')">Mở dịch đoạn này 🌟</button>
+                <div class="translation-content" id="trans-I">
+                    Trong khi đó, nhà phê bình người Úc Mendelssohn cũng chỉ ra rằng Luân Đôn ngày càng kém quan trọng đối với thế hệ nghệ sĩ ngày nay, và điều này phần nào làm suy yếu sự trang trọng xung quanh cuộc triển lãm tại Luân Đôn. Bà nói: 'Trung Quốc là thị trường nghệ thuật quan trọng nhất trên thế giới. Nếu bạn thành công ở Thượng Hải, bạn đã thực sự thành công. Thế giới đã thay đổi. Học trò của tôi ở Úc, những người đến từ khắp nơi trên thế giới, thực sự muốn xem Venice Biennale và Art Basel, nhưng họ ít quan tâm đến việc đi Luân Đôn hơn. Khi tôi lớn lên, Luân Đôn là điểm đến, và rồi khi tôi học đại học, tất cả những người trẻ thông minh đều muốn đến New York. Bây giờ họ muốn đi khắp mọi nơi. Không còn thứ gọi là trung tâm và vùng ngoại biên như trước đây nữa. Nó phức tạp hơn rất nhiều.'
+                </div>
+            </div>
+
+            <!-- Beautiful Master Glossary Sheet -->
+            <div class="glossary-section">
+                <h3 style="color: var(--dark-purple);">📚 BẢNG TỪ VỰNG HỌC THUẬT QUY MÔ (GLOSSARY)</h3>
+                <p style="font-size: 13px; color: #7F8C8D; margin-top: 4px;">Tổng hợp chính xác 50 từ vựng cốt lõi học thuật B2-C2 xuất hiện trực tiếp hoặc đồng nghĩa trong đề thi.</p>
+                <table class="glossary-table">
+                    <thead>
+                        <tr>
+                            <th>Từ vựng</th>
+                            <th>Từ loại</th>
+                            <th>Nghĩa tiếng Việt & Từ đồng nghĩa trong đề</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Landscape / Landscapes</td><td>n</td><td>Phong cảnh, tranh phong cảnh (chủ đề chính)</td></tr>
+                        <tr><td>Evolution</td><td>n</td><td>Sự tiến hóa, quá trình phát triển phát triển (= development)</td></tr>
+                        <tr><td>Spectacular</td><td>adj</td><td>Ngoạn mục, hùng vĩ, vô cùng ấn tượng</td></tr>
+                        <tr><td>Colonial art</td><td>n</td><td>Nghệ thuật thời kỳ thuộc địa thuộc địa</td></tr>
+                        <tr><td>Culminating</td><td>v/adj</td><td>Đạt đến đỉnh cao, kết thúc bằng điểm cao nhất</td></tr>
+                        <tr><td>Flexible</td><td>adj</td><td>Linh hoạt, dễ thích ứng, không cứng nhắc</td></tr>
+                        <tr><td>Landmark</td><td>adj/n</td><td>Mang tính cột mốc, bước ngoặt trọng đại</td></tr>
+                        <tr><td>Former colony</td><td>n</td><td>Cựu thuộc địa, thuộc địa cũ</td></tr>
+                        <tr><td>Excel / Excels</td><td>v</td><td>Xuất sắc, vượt trội hơn người khác</td></tr>
+                        <tr><td>Criticism</td><td>n</td><td>Sự chỉ trích, phê bình, phê phán</td></tr>
+                        <tr><td>Controversial</td><td>adj</td><td>Gây tranh cãi dữ dội, nhiều ý kiến trái chiều</td></tr>
+                        <tr><td>Condescending</td><td>adj</td><td>Hạ mình, kẻ cả, tỏ vẻ bề trên tự phụ</td></tr>
+                        <tr><td>Critic</td><td>n</td><td>Nhà phê bình nghệ thuật nghệ thuật chuyên nghiệp</td></tr>
+                        <tr><td>Maturity</td><td>n</td><td>Sự trưởng thành, chín chắn, hoàn thiện</td></tr>
+                        <tr><td>Underlying rules</td><td>n</td><td>Các quy tắc cơ bản, nền tảng cốt lõi</td></tr>
+                        <tr><td>Conservative</td><td>adj</td><td>Bảo thủ, truyền thống, ít thay đổi (= conventional)</td></tr>
+                        <tr><td>Tendency</td><td>n</td><td>Xu hướng, thiên hướng hành vi tâm lý</td></tr>
+                        <tr><td>Insisted</td><td>v</td><td>Khăng khăng, kiên quyết yêu cầu đòi hỏi</td></tr>
+                        <tr><td>Genre</td><td>n</td><td>Thể loại nghệ thuật, phong cách sáng tác</td></tr>
+                        <tr><td>Formative years</td><td>n</td><td>Những năm định hình sơ khởi phát triển</td></tr>
+                        <tr><td>Devotion</td><td>n</td><td>Sự cống hiến, tận tụy, hết lòng yêu mến</td></tr>
+                        <tr><td>Idiosyncrasies</td><td>n</td><td>Đặc tính riêng biệt, nét lập dị đặc trưng riêng</td></tr>
+                        <tr><td>Conventional</td><td>adj</td><td>Thông thường, truyền thống, cổ điển (= conservative)</td></tr>
+                        <tr><td>Embracing</td><td>v</td><td>Đón nhận, ôm lấy, chấp nhận nhiệt thành</td></tr>
+                        <tr><td>Peculiarities</td><td>n</td><td>Nét độc đáo riêng biệt, tính chất kỳ lạ đặc thù (= unique qualities)</td></tr>
+                        <tr><td>Albeit</td><td>conj</td><td>Mặc dù, dẫu cho (= although)</td></tr>
+                        <tr><td>Boundaries</td><td>n</td><td>Ranh giới, giới hạn biên giới</td></tr>
+                        <tr><td>Curated</td><td>v/adj</td><td>Được giám tuyển, tổ chức sắp xếp triển lãm</td></tr>
+                        <tr><td>Distinctiveness</td><td>n</td><td>Nét đặc sắc, tính khác biệt độc đáo (= idiosyncrasies)</td></tr>
+                        <tr><td>Fusion</td><td>n</td><td>Sự kết hợp, dung hợp, hợp nhất hai yếu tố</td></tr>
+                        <tr><td>Contemporary</td><td>adj</td><td>Đương đại, hiện đại, cùng thời (= current generation)</td></tr>
+                        <tr><td>Individualism</td><td>n</td><td>Chủ nghĩa cá nhân, phong cách cá nhân đơn độc</td></tr>
+                        <tr><td>Vision</td><td>n</td><td>Thị giác, tầm nhìn, khả năng quan sát</td></tr>
+                        <tr><td>Atmosphere</td><td>n</td><td>Bầu không khí, khí quyển cảnh quan</td></tr>
+                        <tr><td>Imagery</td><td>n</td><td>Hình ảnh, biểu tượng nghệ thuật hội họa</td></tr>
+                        <tr><td>Embark</td><td>v</td><td>Bắt tay vào làm, khởi hành dấn thân</td></tr>
+                        <tr><td>Beach culture</td><td>n</td><td>Văn hóa bãi biển bãi bồi</td></tr>
+                        <tr><td>Practitioners</td><td>n</td><td>Người hành nghề, nghệ sĩ đang hoạt động</td></tr>
+                        <tr><td>Encounter</td><td>v</td><td>Gặp phải, bắt gặp chạm trán bất ngờ</td></tr>
+                        <tr><td>Aboriginal art</td><td>n</td><td>Nghệ thuật của thổ dân Úc (= Indigenous art)</td></tr>
+                        <tr><td>Warrant</td><td>v</td><td>Xứng đáng, bảo đảm cho một quyền lợi vị trí</td></tr>
+                        <tr><td>Prominent position</td><td>n</td><td>Vị trí nổi bật, quan trọng hàng đầu</td></tr>
+                        <tr><td>Settlers</td><td>n</td><td>Những người định cư khai hoang người da trắng</td></tr>
+                        <tr><td>Indigenous</td><td>adj</td><td>Bản địa, tự nhiên có sẵn (= Aboriginal)</td></tr>
+                        <tr><td>Separate</td><td>adj/v</td><td>Tách biệt, độc lập không phụ thuộc (= independent)</td></tr>
+                        <tr><td>Weakens</td><td>v</td><td>Làm suy yếu, giảm đi giá trị tầm ảnh hưởng</td></tr>
+                        <tr><td>Periphery</td><td>n</td><td>Vùng ngoại biên, vùng rìa, ít quan trọng hơn</td></tr>
+                        <tr><td>Inevitable</td><td>adj</td><td>Không thể tránh khỏi, tất yếu xảy ra</td></tr>
+                        <tr><td>Peculiar</td><td>adj</td><td>Riêng biệt, lập dị độc đáo</td></tr>
+                        <tr><td>Aesthetic</td><td>adj/n</td><td>Thuộc về mỹ học, tính thẩm mỹ hội họa</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Right Column Pane: Exercises Area -->
+        <div class="panel panel-right">
+            
+            <!-- SECTION 1: QUESTIONS 27-31 -->
+            <div class="section-title">📊 DẠNG 1: YES / NO / NOT GIVEN (Questions 27–31)</div>
+            <p style="font-size: 13px; color: #57606F; margin-bottom: 15px; font-weight: bold;">Chọn giá trị tương ứng trong thanh cuộn cho mỗi câu hỏi dưới đây:</p>
+
+            <!-- Card Q27 -->
+            <div class="question-card" id="card-q27">
+                <div class="question-text">27. As expected, the artworks chosen for the exhibition reflect a narrow interpretation of landscape.</div>
+                <select id="q27" class="roll-select" onchange="checkDropdown('q27', 'NO', 'pA')">
+                    <option value="">-- Lựa chọn --</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <option value="NOT GIVEN">NOT GIVEN</option>
+                </select>
+                
+                <div class="explanation-box" id="exp-q27">
+                    <div class="exp-segment"><span class="exp-title">1. ĐÁP ÁN:</span> <span class="exp-correct">NO</span></div>
+                    <div class="exp-segment"><span class="exp-title">2. ĐOẠN CHỨA ĐÁP ÁN:</span> 
+                        <div class="exp-quote">"It is hardly surprising, then, that this results in a flexible, wide-ranging notion of landscape."</div>
+                    </div>
+                    <div class="exp-segment"><span class="exp-title">3. DỊCH NGHĨA ĐOẠN CHỨA ĐÁP ÁN:</span> Đoạn A nêu rõ việc bao gồm nhiều nghệ sĩ từ thời thuộc địa đến hiện đại mang lại một khái niệm linh hoạt, sâu rộng (flexible, wide-ranging notion) về phong cảnh. Nhận định bảo nó phản ánh một góc nhìn hạn hẹp (narrow interpretation) là mâu thuẫn hoàn toàn.</div>
+                    <div class="exp-segment"><span class="exp-title">4. CỤM TỪ ĐỒNG NGHĨA:</span> flexible, wide-ranging &ne; narrow | hardly surprising = as expected <button class="btn-locate" onclick="locatePassage('pA')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Card Q28 -->
+            <div class="question-card" id="card-q28">
+                <div class="question-text">28. The Academy rejected Australian suggestions for the subject of the exhibition.</div>
+                <select id="q28" class="roll-select" onchange="checkDropdown('q28', 'NOT GIVEN', 'pB')">
+                    <option value="">-- Lựa chọn --</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <option value="NOT GIVEN">NOT GIVEN</option>
+                </select>
+                
+                <div class="explanation-box" id="exp-q28">
+                    <div class="exp-segment"><span class="exp-title">1. ĐÁP ÁN:</span> <span class="exp-correct">NOT GIVEN</span></div>
+                    <div class="exp-segment"><span class="exp-title">2. ĐOẠN CHỨA ĐÁP ÁN:</span> 
+                        <div class="exp-quote">"...there is a suggestion that British artistic values have directed this exhibition, rather than allowing Australia the freedom to demonstrate its maturity."</div>
+                    </div>
+                    <div class="exp-segment"><span class="exp-title">3. DỊCH NGHĨA ĐOẠN CHỨA ĐÁP ÁN:</span> Đoạn B chỉ trích việc các giá trị nghệ thuật Anh đã áp đặt, định hướng triển lãm này thay vì cho Úc sự tự do sáng tạo. Tuy nhiên, bài viết hoàn toàn không có thông tin nói rằng người Úc đã đưa ra các gợi ý cụ thể nào và bị Học viện từ chối (rejected).</div>
+                    <div class="exp-segment"><span class="exp-title">4. CỤM TỪ ĐỒNG NGHĨA:</span> Không xuất hiện thông tin bác bỏ đề xuất cụ thể nào để đối chiếu trong bài. <button class="btn-locate" onclick="locatePassage('pB')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Card Q29 -->
+            <div class="question-card" id="card-q29">
+                <div class="question-text">29. The colonial relationship meant that early Australian landscape painting followed the traditions of English landscape painting.</div>
+                <select id="q29" class="roll-select" onchange="checkDropdown('q29', 'YES', 'pD')">
+                    <option value="">-- Lựa chọn --</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <option value="NOT GIVEN">NOT GIVEN</option>
+                </select>
+                
+                <div class="explanation-box" id="exp-q29">
+                    <div class="exp-segment"><span class="exp-title">1. ĐÁP ÁN:</span> <span class="exp-correct">YES</span></div>
+                    <div class="exp-segment"><span class="exp-title">2. ĐOẠN CHỨA ĐÁP ÁN:</span> 
+                        <div class="exp-quote">"Because of colonial ties, it was inevitable during Australian art’s formative years that it would reflect Britain’s devotion to the beloved landscape..."</div>
+                    </div>
+                    <div class="exp-segment"><span class="exp-title">3. DỊCH NGHĨA ĐOẠN CHỨA ĐÁP ÁN:</span> Do các mối liên hệ thuộc địa (colonial ties), trong những năm định hình sơ khởi, nghệ thuật Úc tất yếu phải phản ánh sự cống hiến tôn sùng của người Anh đối với hội họa phong cảnh. Điều này hoàn toàn trùng khớp với nhận định.</div>
+                    <div class="exp-segment"><span class="exp-title">4. CỤM TỪ ĐỒNG NGHĨA:</span> colonial ties = colonial relationship | reflect Britain's devotion = followed the traditions <button class="btn-locate" onclick="locatePassage('pD')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Card Q30 -->
+            <div class="question-card" id="card-q30">
+                <div class="question-text">30. The exhibition reflects the fact that Australian art developed its own particular qualities.</div>
+                <select id="q30" class="roll-select" onchange="checkDropdown('q30', 'YES', 'pE')">
+                    <option value="">-- Lựa chọn --</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <option value="NOT GIVEN">NOT GIVEN</option>
+                </select>
+                
+                <div class="explanation-box" id="exp-q30">
+                    <div class="exp-segment"><span class="exp-title">1. ĐÁP ÁN:</span> <span class="exp-correct">YES</span></div>
+                    <div class="exp-segment"><span class="exp-title">2. ĐOẠN CHỨA ĐÁP ÁN:</span> 
+                        <div class="exp-quote">"‘What I wanted to show was how Australian art develops a real distinctiveness, associated with the landscape and the light.’"</div>
+                    </div>
+                    <div class="exp-segment"><span class="exp-title">3. DỊCH NGHĨA ĐOẠN CHỨA ĐÁP ÁN:</span> Giám tuyển Soriano khẳng định mục tiêu của triển lãm là chỉ ra cách nghệ thuật Úc phát triển một nét độc đáo khác biệt thực sự (real distinctiveness). Đoạn D cũng ghi nhận Học viện đang đón nhận những nét độc đáo riêng biệt (peculiarities = particular qualities) của nghệ thuật Úc.</div>
+                    <div class="exp-segment"><span class="exp-title">4. CỤM TỪ ĐỒNG NGHĨA:</span> real distinctiveness / peculiarities = own particular qualities <button class="btn-locate" onclick="locatePassage('pE')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Card Q31 -->
+            <div class="question-card" id="card-q31">
+                <div class="question-text">31. Contemporary Australian artists have generally rejected British landscape traditions.</div>
+                <select id="q31" class="roll-select" onchange="checkDropdown('q31', 'NO', 'pG')">
+                    <option value="">-- Lựa chọn --</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <option value="NOT GIVEN">NOT GIVEN</option>
+                </select>
+                
+                <div class="explanation-box" id="exp-q31">
+                    <div class="exp-segment"><span class="exp-title">1. ĐÁP ÁN:</span> <span class="exp-correct">NO</span></div>
+                    <div class="exp-segment"><span class="exp-title">2. ĐOẠN CHỨA ĐÁP ÁN:</span> 
+                        <div class="exp-quote">"...there can be little denying that British landscape painting is still relevant to a current generation of Australian practitioners, however indirectly."</div>
+                    </div>
+                    <div class="exp-segment"><span class="exp-title">3. DỊCH NGHĨA ĐOẠN CHỨA ĐÁP ÁN:</span> Đoạn G khẳng định không thể phủ nhận rằng hội họa phong cảnh Anh vẫn còn liên quan, thích hợp (still relevant) với thế hệ các nghệ sĩ Úc hiện tại (current generation = contemporary artists), dù là gián tiếp. Nhận định bảo họ "từ chối, bài xích" (rejected) là mâu thuẫn bài văn.</div>
+                    <div class="exp-segment"><span class="exp-title">4. CỤM TỪ ĐỒNG NGHĨA:</span> still relevant &ne; rejected | current generation = contemporary artists <button class="btn-locate" onclick="locatePassage('pG')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+
+            <!-- SECTION 2: QUESTIONS 32-36 -->
+            <div class="section-title">🏆 DẠNG 2: MULTIPLE CHOICE QUESTIONS (Questions 32–36)</div>
+            <p style="font-size: 13px; color: #57606F; margin-bottom: 15px; font-weight: bold;">Click trực tiếp lên đáp án hàng dòng bên dưới để kiểm tra chính xác:</p>
+
+            <!-- Card Q32 -->
+            <div class="question-card" id="card-q32">
+                <div class="question-text">32. What is the writer’s main point in the second paragraph (Paragraph B)?</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q32', 'A', this, 'pB')"><div class="mc-letter">A</div> Australian landscape painting derives from the British tradition.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q32', 'B', this, 'pB')"><div class="mc-letter">B</div> Australian landscape painting is more highly regarded than British.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q32', 'C', this, 'pB')"><div class="mc-letter">C</div> Britain is still imposing its principles on Australian art.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q32', 'D', this, 'pB')"><div class="mc-letter">D</div> British art cannot be compared to Australian art.</div>
+                
+                <div class="explanation-box" id="exp-q32">
+                    <div class="exp-segment"><span class="exp-title">ĐÁP ÁN ĐÚNG:</span> <span class="exp-correct">C</span></div>
+                    <div class="exp-quote">"...there is a suggestion that British artistic values have directed this exhibition, rather than allowing Australia the freedom to demonstrate its maturity."</div>
+                    <div class="exp-segment"><strong>Giải thích chi tiết:</strong> Ý chính của đoạn B là sự áp đặt ngầm của Anh lên thuộc địa cũ thông qua nghệ thuật: các giá trị nghệ thuật của Anh đã định hướng điều khiển triển lãm này (British artistic values have directed this exhibition) thay vì cho Úc tự do phát triển độc lập, tương ứng với "imposing its principles". <button class="btn-locate" onclick="locatePassage('pB')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Card Q33 -->
+            <div class="question-card" id="card-q33">
+                <div class="question-text">33. What does Joanna Mendelssohn find surprising (Paragraph C)?</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q33', 'A', this, 'pC')"><div class="mc-letter">A</div> Modern Australian landscape painting has great variety.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q33', 'B', this, 'pC')"><div class="mc-letter">B</div> The guidelines for the choice of work were very traditional.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q33', 'C', this, 'pC')"><div class="mc-letter">C</div> Landscape painting remains a popular subject for British artists.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q33', 'D', this, 'pC')"><div class="mc-letter">D</div> The British find the Australian landscape unsuitable as a subject.</div>
+                
+                <div class="explanation-box" id="exp-q33">
+                    <div class="exp-segment"><span class="exp-title">ĐÁP ÁN ĐÚNG:</span> <span class="exp-correct">B</span></div>
+                    <div class="exp-quote">"What Mendelssohn found surprising about the exhibition was the underlying rules for the selection of works seemed to have been so conservative."</div>
+                    <div class="exp-segment"><strong>Giải thích chi tiết:</strong> Từ "conservative" trong văn bản đồng nghĩa hoàn hảo với từ "traditional" (bảo thủ, truyền thống). Quy tắc cơ bản cho việc lựa chọn tác phẩm (underlying rules for the selection) đồng nghĩa với "guidelines for the choice of work". Do đó chọn B. <button class="btn-locate" onclick="locatePassage('pC')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Card Q34 -->
+            <div class="question-card" id="card-q34">
+                <div class="question-text">34. Shaun Gladwell’s work is included in the exhibition because</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q34', 'A', this, 'pF')"><div class="mc-letter">A</div> it adopts a subjective approach to depicting the landscape.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q34', 'B', this, 'pF')"><div class="mc-letter">B</div> skateboarding is an inspiration to many Australian artists.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q34', 'C', this, 'pF')"><div class="mc-letter">C</div> storms are a significant feature in the Australian landscape.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q34', 'D', this, 'pF')"><div class="mc-letter">D</div> Bondi is an iconic Australian location.</div>
+                
+                <div class="explanation-box" id="exp-q34">
+                    <div class="exp-segment"><span class="exp-title">ĐÁP ÁN ĐÚNG:</span> <span class="exp-correct">A</span></div>
+                    <div class="exp-quote">"It is his acknowledgment of landscape (or seascape) tradition, coloured by Gladwell’s own individualism. ‘...I wanted to make it personal...’"</div>
+                    <div class="exp-segment"><strong>Giải thích chi tiết:</strong> Tác phẩm của Gladwell kết hợp giữa truyền thống châu Âu với trải nghiệm cá nhân đặc thù qua lăng kính trượt ván của mình ("make it personal", "individualism"), tức là áp dụng một cách tiếp cận mang tính chủ quan, cá nhân hóa để khắc họa phong cảnh (subjective approach = personal / individualism). <button class="btn-locate" onclick="locatePassage('pF')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Card Q35 -->
+            <div class="question-card" id="card-q35">
+                <div class="question-text">35. What was the reason for Soriano including Aboriginal art in the exhibition?</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q35', 'A', this, 'pH')"><div class="mc-letter">A</div> It is not well known in London art circles.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q35', 'B', this, 'pH')"><div class="mc-letter">B</div> Aboriginal landscape painting influenced Australian settlers.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q35', 'C', this, 'pH')"><div class="mc-letter">C</div> It is part of the Australian art tradition and not independent of it.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q35', 'D', this, 'pH')"><div class="mc-letter">D</div> Modern Aboriginal painting deals with changes to the landscape.</div>
+                
+                <div class="explanation-box" id="exp-q35">
+                    <div class="exp-segment"><span class="exp-title">ĐÁP ÁN ĐÚNG:</span> <span class="exp-correct">C</span></div>
+                    <div class="exp-quote">"‘...and I felt it was most accurate to be seen as part of Australian art history, rather than a separate exhibition of its own.’"</div>
+                    <div class="exp-segment"><strong>Giải thích chi tiết:</strong> Giám tuyển Soriano mong muốn đưa nghệ thuật của thổ dân Bản địa đặt vào đúng bối cảnh dòng chảy lịch sử nghệ thuật Úc nói chung, như một phần không thể tách rời của nó (part of Australian art history, rather than a separate exhibition = not independent of it). <button class="btn-locate" onclick="locatePassage('pH')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Card Q36 -->
+            <div class="question-card" id="card-q36">
+                <div class="question-text">36. By referring to China, Mendelssohn is making the point that</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q36', 'A', this, 'pI')"><div class="mc-letter">A</div> having an exhibition in London is not as important as it used to be.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q36', 'B', this, 'pI')"><div class="mc-letter">B</div> young artists in Britain are not interested in Australian art.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q36', 'C', this, 'pI')"><div class="mc-letter">C</div> art from Shanghai is more important than Australian art.</div>
+                <div class="mc-option" onclick="checkMultipleChoice('q36', 'D', this, 'pI')"><div class="mc-letter">D</div> New York is still a preferred destination for young artists.</div>
+                
+                <div class="explanation-box" id="exp-q36">
+                    <div class="exp-segment"><span class="exp-title">ĐÁP ÁN ĐÚNG:</span> <span class="exp-correct">A</span></div>
+                    <div class="exp-quote">"Meanwhile, Australian critic Mendelssohn also points out that London is increasingly less important to today’s generation of artists... ‘China is the most important art market... chúng ít quan tâm đến London hơn’"</div>
+                    <div class="exp-segment"><strong>Giải thích chi tiết:</strong> Khi lấy dẫn chứng về Trung Quốc/Thượng Hải và các hội chợ nghệ thuật Venice, Basel, Mendelssohn muốn làm nổi bật luận điểm rằng London đang ngày càng giảm bớt tầm quan trọng đối với thế hệ nghệ sĩ trẻ ngày nay so với quá khứ (London is increasingly less important = not as important as it used to be). <button class="btn-locate" onclick="locatePassage('pI')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+
+            <!-- SECTION 3: QUESTIONS 37-40 -->
+            <div class="section-title">📝 DẠNG 3: MATCHING SENTENCE ENDINGS (Questions 37–40)</div>
+            <p style="font-size: 13px; color: #57606F; margin-bottom: 15px; font-weight: bold;">Chọn đuôi câu phù hợp nhất từ danh sách A-F dưới đây:</p>
+            
+            <div style="background-color: #FFF0F3; padding: 12px; border-radius: 12px; font-size: 13px; color: #4B4B4B; margin-bottom: 15px; border: 1px solid #FFE3E8;">
+                <strong>DANH SÁCH ĐUÔI CÂU LỰA CHỌN (A-F):</strong><br>
+                A. reflects the mood created by the natural environment.<br>
+                B. demonstrates that the dominant art form in Australia is landscape painting.<br>
+                C. demonstrates an understanding of the historical importance of the land.<br>
+                D. showcases a very small number of artists.<br>
+                E. demonstrates a strong European flavour.<br>
+                F. shows an acceptance of the unique qualities of Australian art.
+            </div>
+
+            <!-- Question 37 -->
+            <div class="question-card" id="card-q37">
+                <div class="question-text">37. In spite of its conservatism, the Royal Academy exhibition
+                    <select id="q37" class="roll-select" onchange="checkDropdownEnding('q37', 'F', 'pD')">
+                        <option value="">- Chọn -</option>
+                        <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                        <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+                    </select>
+                </div>
+                <div class="explanation-box" id="exp-q37">
+                    <div class="exp-segment"><span class="exp-title">Đáp án đúng:</span> <span class="exp-correct">F</span></div>
+                    <div class="exp-quote">"...the Academy is nevertheless embracing the peculiarities of Australian art from the mid-19th century onward..."</div>
+                    <div class="exp-segment"><strong>Giải thích:</strong> Mặc dù mang tính truyền thống cũ kỹ, Học viện vẫn dang tay chào đón, công nhận những đặc trưng độc đáo riêng biệt của nghệ thuật Úc (embracing the peculiarities = acceptance of the unique qualities). <button class="btn-locate" onclick="locatePassage('pD')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Question 38 -->
+            <div class="question-card" id="card-q38">
+                <div class="question-text">38. Australian art of the early to mid-1800s
+                    <select id="q38" class="roll-select" onchange="checkDropdownEnding('q38', 'E', 'pE')">
+                        <option value="">- Chọn -</option>
+                        <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                        <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+                    </select>
+                </div>
+                <div class="explanation-box" id="exp-q38">
+                    <div class="exp-segment"><span class="exp-title">Đáp án đúng:</span> <span class="exp-correct">E</span></div>
+                    <div class="exp-quote">"‘Certainly the influence of English, French or German art is much more evident in the early periods, in the early 1800s to mid-1800s...’"</div>
+                    <div class="exp-segment"><strong>Giải thích:</strong> Giai đoạn đầu thế kỷ 19 chịu ảnh hưởng đậm nét rõ ràng từ nghệ thuật của Anh, Pháp, Đức - các cường quốc châu Âu (influence of English, French or German art = strong European flavour). <button class="btn-locate" onclick="locatePassage('pE')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Question 39 -->
+            <div class="question-card" id="card-q39">
+                <div class="question-text">39. The modern work by Gladwell chosen for the exhibition
+                    <select id="q39" class="roll-select" onchange="checkDropdownEnding('q39', 'A', 'pF')">
+                        <option value="">- Chọn -</option>
+                        <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                        <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+                    </select>
+                </div>
+                <div class="explanation-box" id="exp-q39">
+                    <div class="exp-segment"><span class="exp-title">Đáp án đúng:</span> <span class="exp-correct">A</span></div>
+                    <div class="exp-quote">"‘...because I was interested in Turner and the idea of atmosphere affecting vision, something I was really interested in around the time of Storm Sequence.’"</div>
+                    <div class="exp-segment"><strong>Giải thích:</strong> Tác phẩm quay cảnh lướt ván giữa một trận bão khốc liệt ngoài khơi thể hiện sự chú tâm của Gladwell về việc bầu không khí môi trường ảnh hưởng sâu sắc đến thị giác/tâm trạng con người (atmosphere affecting vision = reflects the mood created by the natural environment). <button class="btn-locate" onclick="locatePassage('pF')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+            <!-- Question 40 -->
+            <div class="question-card" id="card-q40">
+                <div class="question-text">40. Including Aboriginal art in the exhibition
+                    <select id="q40" class="roll-select" onchange="checkDropdownEnding('q40', 'C', 'pH')">
+                        <option value="">- Chọn -</option>
+                        <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                        <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+                    </select>
+                </div>
+                <div class="explanation-box" id="exp-q40">
+                    <div class="exp-segment"><span class="exp-title">Đáp án đúng:</span> <span class="exp-correct">C</span></div>
+                    <div class="exp-quote">"‘One of the reasons landscape was seen as being the right theme was because Australian art started in and on the landscape...’"</div>
+                    <div class="exp-segment"><strong>Giải thích:</strong> Thổ dân chiếm vị trí trang trọng vì họ xuất hiện đầu tiên ("first"), và nghệ thuật Úc khởi nguồn trực tiếp từ trên mảnh đất quê hương này. Việc lồng ghép thể hiện sự thấu hiểu sâu sắc về tầm quan trọng mang tính lịch sử của đất đai Úc (historical importance of the land). <button class="btn-locate" onclick="locatePassage('pH')">📍 Xem dẫn chứng</button></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bottom Submission Bar Container -->
+    <div class="footer-submit">
+        <button class="btn-submit-all" onclick="submitExam()">NỘP BÀI THI CHẤM ĐIỂM NGAY 🏆</button>
+    </div>
+
+    <!-- Gamified Report Score Dashboard Modal Overlay Popup -->
+    <div class="modal-overlay" id="result-modal">
+        <div class="modal-card">
+            <h2 style="color: var(--primary-pink); font-size: 26px;">🎉 BẢNG VÀNG THÀNH TÍCH 🎉</h2>
+            <div class="modal-score" id="score-text">0 / 14</div>
+            <div class="modal-comment" id="comment-text">Chúc mừng con đã hoàn thành bài thi đọc hiểu!</div>
+            <button class="btn-close-modal" onclick="closeModal()">ĐÓNG ĐỂ XEM CHI TIẾT LỖI</button>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio API pure synthesizer sound playback controls
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.16); // G5
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(75, audioCtx.currentTime + 0.35);
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            }
+        }
+
+        // CountDown Timer execution state blocks
+        let timeLeft = 25 * 60; 
+        let timerId = null;
+        let timerRunning = false;
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            document.getElementById('timer-display').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('btn-timer-toggle');
+            if (!timerRunning) {
+                timerRunning = true;
+                btn.innerText = "TẠM DỪNG";
+                btn.style.background = "#FF4757";
+                btn.style.boxShadow = "0 4px 0 #C23616";
+                timerId = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerId);
+                        alert("Đã hết giờ làm bài! Con hãy xem lại kết quả chấm điểm nhé.");
+                        btn.innerText = "BẮT ĐẦU";
+                        timerRunning = false;
+                    }
+                }, 1000);
+            } else {
+                timerRunning = false;
+                btn.innerText = "TIẾP TỤC";
+                btn.style.background = "var(--yellow-sunny)";
+                btn.style.boxShadow = "0 4px 0 #D6A232";
+                clearInterval(timerId);
+            }
+        }
+
+        // Inline text interpretation toggler
+        function toggleTranslation(id) {
+            const target = document.getElementById('trans-' + id);
+            target.style.display = (target.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Real-time tracking performance bar calculations
+        const totalQuestions = 14;
+        const answersState = {};
+
+        function recalculateProgressBar() {
+            let keysCount = Object.keys(answersState).length;
+            let ratio = (keysCount / totalQuestions) * 100;
+            document.getElementById('completion-progress').style.width = ratio + '%';
+        }
+
+        // Validate Dropdown list selections (YES / NO / NOT GIVEN)
+        function checkDropdown(id, correctVal, paragraphId) {
+            const el = document.getElementById(id);
+            const card = document.getElementById('card-' + id);
+            const exp = document.getElementById('exp-' + id);
+            const val = el.value;
+
+            if (val === "") return;
+
+            if (val === correctVal) {
+                card.className = "question-card card-correct";
+                playSound('correct');
+                answersState[id] = true;
+            } else {
+                card.className = "question-card card-wrong-shake";
+                setTimeout(() => card.className = "question-card", 400);
+                playSound('wrong');
+                el.value = correctVal; // Auto-populate correct answers immediately
+                answersState[id] = false;
+            }
+            exp.style.display = "block";
+            recalculateProgressBar();
+        }
+
+        // Validate Dropdown for Matching Endings
+        function checkDropdownEnding(id, correctVal, paragraphId) {
+            const el = document.getElementById(id);
+            const card = document.getElementById('card-' + id);
+            const exp = document.getElementById('exp-' + id);
+            const val = el.value;
+
+            if (val === "") return;
+
+            if (val === correctVal) {
+                card.className = "question-card card-correct";
+                playSound('correct');
+                answersState[id] = true;
+            } else {
+                card.className = "question-card card-wrong-shake";
+                setTimeout(() => card.className = "question-card", 400);
+                playSound('wrong');
+                el.value = correctVal; 
+                answersState[id] = false;
+            }
+            exp.style.display = "block";
+            recalculateProgressBar();
+        }
+
+        // Multiple choice selection logic
+        const mcAnswers = { 'q32': 'C', 'q33': 'B', 'q34': 'A', 'q35': 'C', 'q36': 'A' };
+
+        function checkMultipleChoice(qId, selectedLetter, elementRef, paragraphId) {
+            const card = document.getElementById('card-' + qId);
+            const exp = document.getElementById('exp-' + qId);
+
+            // Turn off pointer clicks once picked
+            const options = card.querySelectorAll('.mc-option');
+            options.forEach(o => o.style.pointerEvents = 'none');
+
+            const accurateLetter = mcAnswers[qId];
+
+            if (selectedLetter === accurateLetter) {
+                elementRef.classList.add('selected-correct');
+                playSound('correct');
+                answersState[qId] = true;
+            } else {
+                elementRef.classList.add('selected-wrong');
+                card.classList.add('card-wrong-shake');
+                setTimeout(() => card.classList.remove('card-wrong-shake'), 400);
+                playSound('wrong');
+                answersState[qId] = false;
+
+                // Emphasize the true target row automatically
+                options.forEach(o => {
+                    if (o.getAttribute('onclick').includes(`'${accurateLetter}'`)) {
+                        o.classList.add('selected-correct');
+                    }
+                });
+            }
+            exp.style.display = "block";
+            recalculateProgressBar();
+        }
+
+        // Precise dynamic page-scroll position highlighter tool
+        function locatePassage(paragraphId) {
+            document.querySelectorAll('.paragraph-block').forEach(p => {
+                p.classList.remove('highlighted-location');
+            });
+
+            const block = document.getElementById(paragraphId);
+            if (block) {
+                block.classList.add('highlighted-location');
+                block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // Comprehensive scoreboard calculations
+        function submitExam() {
+            let finalScore = 0;
+            const keysList = ['q27', 'q28', 'q29', 'q30', 'q31', 'q32', 'q33', 'q34', 'q35', 'q36', 'q37', 'q38', 'q39', 'q40'];
+            
+            keysList.forEach(k => {
+                if (answersState[k] === true) finalScore++;
+            });
+
+            document.getElementById('score-text').innerText = `${finalScore} / 14`;
+            
+            let comment = "";
+            if (finalScore === 14) {
+                comment = "👑 HOÀN HẢO TUYỆT ĐỈNH! Con đạt điểm tuyệt đối 14/14, Ms Hằng bái phục và vô cùng tự hào về tư duy nghệ thuật của con!";
+            } else if (finalScore >= 11) {
+                comment = "🌟 XUẤT SẮC QUÁ CON ƠI! Điểm số Reading chạm ngưỡng siêu cao. Xem kỹ các câu bẫy Paraphrase về chủ đề hội họa phong cảnh nước Úc để rút kinh nghiệm sâu sắc nhé.";
+            } else if (finalScore >= 7) {
+                comment = "👍 KHÁ TỐT NÈ! Con đã hiểu được cách định vị thông tin cốt lõi. Hãy trau dồi sâu thêm bảng Glossary để tăng tốc độ xử lý các bài đọc dài dạng này.";
+            } else {
+                comment = "💪 CỐ LÊN NHÉ CON! Triển lãm nghệ thuật và hội họa cổ điển là một chủ đề Reading cực kỳ trừu tượng và nhiều từ vựng lạ. Con hãy mở các đoạn dịch song ngữ lên để nạp thêm từ vựng nhé.";
+            }
+
+            document.getElementById('comment-text').innerText = comment;
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('result-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
